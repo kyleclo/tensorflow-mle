@@ -7,7 +7,7 @@
 
 import numpy as np
 import tensorflow as tf
-from print_util import sfill, sfloat, sarray
+from util.sprint import sfill, sfloat, sarray
 
 # NUM_COMPONENTS = 2
 # TRUE_PROBS = np.array([0.6, 0.4])

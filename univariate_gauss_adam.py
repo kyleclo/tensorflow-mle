@@ -7,8 +7,8 @@
 
 import numpy as np
 import tensorflow as tf
-from print_util import sfill, sfloat, shess
-from plot_util import plot_canonical_gauss
+from util.sprint import sfill, sfloat, shess
+from util.plot import plot_canonical_gauss
 
 TRUE_MU = 10.0
 TRUE_SIGMA = 5.0

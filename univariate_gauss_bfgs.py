@@ -7,9 +7,9 @@
 
 import numpy as np
 import tensorflow as tf
-from dist_util import get_mu, get_sigma, get_eta1, get_eta2
-from print_util import sfill, sfloat, shess
-from plot_util import plot_canonical_gauss, plot_natural_gauss
+from util.dist import get_mu, get_sigma, get_eta1, get_eta2
+from util.sprint import sfill, sfloat, shess
+from util.plot import plot_canonical_gauss, plot_natural_gauss
 
 TRUE_MU = 10.0
 TRUE_SIGMA = 5.0
