@@ -148,8 +148,8 @@ print('Fitted MLE: [{:.4f}, {:.4f}]'.format(obs_mu[-1], obs_sigma[-1]))
 print('Target MLE: [{:.4f}, {:.4f}]'.format(x_obs.mean(), x_obs.std()))
 
 # check hessians for positive definite
-print('First {}'.format(shess(obs_hess[0])))
-print('Final {}'.format(shess(obs_hess[-1])))
+print('First {}'.format(shess(obs_hess[0], MAX_CHARS)))
+print('Final {}'.format(shess(obs_hess[-1], MAX_CHARS)))
 print('All Hessians are PD: {}'
       .format(np.all([np.all(np.linalg.eigvals(h) > 0) for h in obs_hess])))
 

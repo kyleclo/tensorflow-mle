@@ -17,7 +17,7 @@ from util.sprint import sfill, sfloat, sarray
 
 NUM_COMPONENTS = 3
 TRUE_PROBS = np.array([0.5, 0.3, 0.2])
-TRUE_MU = np.array([-1.5, 0.0, 1.5])
+TRUE_MU = np.array([-1.5, 0.0, 1.0])
 TRUE_SIGMA = np.array([0.5, 0.4, 0.3])
 SAMPLE_SIZE = 10000
 
@@ -45,7 +45,6 @@ x_obs = np.random.normal(loc=TRUE_MU[z_obs],
 
 # plot
 # import matplotlib.pyplot as plt
-#
 # plt.hist([x_obs[z_obs == i] for i in range(NUM_COMPONENTS)],
 #          bins=100, stacked=True, alpha=0.5, normed=True,
 #          label=['component {}'.format(i + 1) for i in range(NUM_COMPONENTS)])

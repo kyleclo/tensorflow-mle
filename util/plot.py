@@ -8,7 +8,7 @@
 # visualize results
 import numpy as np
 import scipy.stats as sp
-from dist_util import get_mu, get_sigma
+from util.dist import get_mu, get_sigma
 import matplotlib.pyplot as plt
 
 

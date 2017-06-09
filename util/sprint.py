@@ -28,11 +28,12 @@ def sfloat(x, num_chars=10):
         .format(x)
 
 
-def shess(hess):
+def shess(hess, num_chars=10):
     """Stringify an n x n Hessian matrix"""
     n = hess.shape[0]
     s = 'Hessian:' + ('\n' + '| {} ' * n + '|') * n
-    return s.format(*[sfloat(h) for h in np.array(hess).reshape(-1)])
+    return s.format(*[sfloat(h, num_chars)
+                      for h in np.array(hess).reshape(-1)])
 
 
 def sarray(x, num_chars=10):
