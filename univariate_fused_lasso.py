@@ -18,6 +18,11 @@ TRUE_SLOPE = 5
 TRUE_DELTAS = np.array([-9, 3, 1])
 TRUE_PARAMS = np.array([TRUE_INTERCEPT, TRUE_SLOPE] + TRUE_DELTAS.tolist())
 
+# seasonality represented by Fourier sinusoidal wave
+TRUE_SEASONAL_PERIOD = 7
+TRUE_SEASONAL_ORDER = 1
+TRUE_SEASONAL_BETA = np.array([2, 2])
+
 INIT_BETA_PARAMS = {'mean': 0.0, 'stddev': 1.0}
 SMOOTHING_PARAM = 1.0
 LEARNING_RATE = 0.001
@@ -57,12 +62,32 @@ def create_design_matrix(t_grid):
 
 # generate mean trend using design matrix formulation (equivalent to above)
 np.random.seed(0)
-mu_grid = np.matmul(create_design_matrix(t_grid), TRUE_PARAMS)
+mu_grid = np.matmul(create_design_matrix(t_grid), TRUE_PARAMS).reshape(-1, 1)
 
-# generate noisy observations around mean trend
-y_obs = np.array([np.random.normal(loc=mu_grid[t],
-                                   scale=TRUE_SIGMA[TRUE_SEGMENT_LABELS[t]])
-                  for t in range(NUM_OBS)]).reshape(-1, 1)
+
+def fourier_expansion(t_grid, period, order):
+    """Creates design matrix of Fourier terms evaluated at each t"""
+    fourier_term_matrix = [
+        trig_fun((2.0 * np.pi * (k + 1) * np.array(t_grid) / period))
+        for k in range(order)
+        for trig_fun in (np.sin, np.cos)
+        ]
+    return np.stack(fourier_term_matrix, axis=1)
+
+
+# generate weekly seasonal trend using design matrix formulation
+s_grid = np.matmul(fourier_expansion(t_grid,
+                           period=TRUE_SEASONAL_PERIOD,
+                           order=TRUE_SEASONAL_ORDER),
+                   TRUE_SEASONAL_BETA).reshape(-1, 1)
+
+# generate noise
+e_grid = np.array([np.random.normal(loc=0.0,
+                                    scale=TRUE_SIGMA[TRUE_SEGMENT_LABELS[t]])
+                   for t in range(NUM_OBS)]).reshape(-1, 1)
+
+# compute observations
+y_obs = mu_grid + s_grid.sum(axis=1).reshape(-1, 1) + e_grid
 
 # center and scale the data
 CENTER = y_obs.mean()
@@ -163,8 +188,9 @@ with tf.Session() as sess:
         i += 1
 
 # visualize results
-plt.plot(t_grid, mu_grid, color='grey', label='mean')
-plt.scatter(x=t_grid, y=SCALE * y_obs + CENTER, s=7, color='blue', marker='o',
+# plt.plot(t_grid, mu_grid, color='blue', label='trend')
+plt.plot(t_grid, mu_grid + s_grid, color='green', label='trend + seasonal')
+plt.scatter(x=t_grid, y=SCALE * y_obs + CENTER, s=7, color='black', marker='o',
             label='obs')
 plt.plot(t_grid, SCALE * obs_beta[-1] + CENTER, color='red', label='est')
 plt.legend(loc='upper right')
