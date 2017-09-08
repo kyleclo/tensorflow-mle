@@ -194,3 +194,4 @@ plt.scatter(x=t_grid, y=SCALE * y_obs + CENTER, s=7, color='black', marker='o',
             label='obs')
 plt.plot(t_grid, SCALE * obs_beta[-1] + CENTER, color='red', label='est')
 plt.legend(loc='upper right')
+plt.show()
